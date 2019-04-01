@@ -1,0 +1,1 @@
+python C:\Users\c804324\Documents\GitHub\people_counter\take_a_video.py

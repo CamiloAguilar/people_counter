@@ -25,9 +25,9 @@ import cv2
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-p", "--prototxt", required=True,
+ap.add_argument("-p", "--prototxt", required=False,
 	help="path to Caffe 'deploy' prototxt file")
-ap.add_argument("-m", "--model", required=True,
+ap.add_argument("-m", "--model", required=False,
 	help="path to Caffe pre-trained model")
 ap.add_argument("-i", "--input", type=str,
 	help="path to optional input video file")
@@ -48,7 +48,8 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 
 # load our serialized model from disk
 print("[INFO] loading model...")
-net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
+#net = cv2.dnn.readNetFromCaffe(args["prototxt"], args["model"])
+net = cv2.dnn.readNetFromCaffe('./mobilenet_ssd/MobileNetSSD_deploy.prototxt', './mobilenet_ssd/MobileNetSSD_deploy.caffemodel')
 
 # if a video path was not supplied, grab a reference to the webcam
 if not args.get("input", False):
