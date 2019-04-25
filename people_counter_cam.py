@@ -1,6 +1,14 @@
 # USAGE
 # To read and write back out to video:
-# python people_counter_cam.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input videos/example_01.mp4 --output output/output_01.avi
+# python people_counter_cam.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input videos/example_01.mp4 --output output/entran_salen_01.avi
+# python people_counter_cam.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input videos/example_02.mp4 --output output/entran_salen_02.avi
+
+# python people_counter_cam.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input videos/IMG_6891.mp4 --output output/plaza_6891.avi
+# python people_counter_cam.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input videos/IMG_6892.mp4 --output output/plaza_6892.avi
+# python people_counter_cam.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input videos/IMG_6893.mp4 --output output/plaza_6893.avi
+# python people_counter_cam.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input videos/IMG_6902.mp4 --output output/plaza_6902.avi
+# python people_counter_cam.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel --input videos/IMG_6903.mp4 --output output/plaza_6903.avi
+
 
 ## with cam
 # python people_counter_cam.py --prototxt mobilenet_ssd/MobileNetSSD_deploy.prototxt --model mobilenet_ssd/MobileNetSSD_deploy.caffemodel
@@ -22,6 +30,7 @@ import imutils
 import time
 import dlib
 import cv2
+#import cv
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -33,9 +42,9 @@ ap.add_argument("-i", "--input", type=str,
 	help="path to optional input video file")
 ap.add_argument("-o", "--output", type=str,
 	help="path to optional output video file")
-ap.add_argument("-c", "--confidence", type=float, default=0.3,
+ap.add_argument("-c", "--confidence", type=float, default=0.40,
 	help="minimum probability to filter weak detections")
-ap.add_argument("-s", "--skip-frames", type=int, default=20,
+ap.add_argument("-s", "--skip-frames", type=int, default=10,
 	help="# of skip frames between detections")
 args = vars(ap.parse_args())
 
@@ -73,7 +82,7 @@ H = None
 # instantiate our centroid tracker, then initialize a list to store
 # each of our dlib correlation trackers, followed by a dictionary to
 # map each unique object ID to a TrackableObject
-ct = CentroidTracker(maxDisappeared=40, maxDistance=50)
+ct = CentroidTracker(maxDisappeared=50, maxDistance=60)
 trackers = []
 trackableObjects = {}
 
@@ -92,6 +101,7 @@ while True:
 	# VideoCapture or VideoStream
 	frame = vs.read()
 	frame = frame[1] if args.get("input", False) else frame
+	#frame = cv2.rotate(frame, rotateCode=cv2.ROTATE_90_CLOCKWISE)
 
 	# if we are viewing a video and we did not grab a frame then we
 	# have reached the end of the video
@@ -174,7 +184,7 @@ while True:
 		for tracker in trackers:
 			# set the status of our system to be 'tracking' rather
 			# than 'waiting' or 'detecting'
-			status = "Rasteando"
+			status = "Rastreando"
 
 			# update the tracker and grab the updated position
 			tracker.update(rgb)
@@ -192,7 +202,7 @@ while True:
 	# draw a horizontal line in the center of the frame -- once an
 	# object crosses this line we will determine whether they were
 	# moving 'up' or 'down'
-	#cv2.line(frame, (0, H // 2), (W, H // 2), (0, 255, 255), 2)
+	cv2.line(frame, (0, H // 2), (W, H // 2), (0, 255, 255), 2)
 
 	# use the centroid tracker to associate the (1) old object
 	# centroids with (2) the newly computed object centroids
@@ -247,17 +257,17 @@ while True:
 
 	# construct a tuple of information we will be displaying on the
 	# frame
-	#info = [
-	#	("Suben", totalUp),
-	#	("Bajas", totalDown),
-	#	("Status", status),
-	#]
+	info = [
+		("Ingresos", totalUp),
+		("Salidas", totalDown),
+		("Status", status),
+	]
 
 	# loop over the info tuples and draw them on our frame
-	#for (i, (k, v)) in enumerate(info):
-	#	text = "{}: {}".format(k, v)
-	#	cv2.putText(frame, text, (10, H - ((i * 20) + 20)),
-	#		cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+	for (i, (k, v)) in enumerate(info):
+		text = "{}: {}".format(k, v)
+		cv2.putText(frame, text, (10, H - ((i * 20) + 20)),
+			cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
 
 	# check to see if we should write the frame to disk
 	if writer is not None:

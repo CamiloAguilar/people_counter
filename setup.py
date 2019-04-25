@@ -8,8 +8,8 @@ os.environ['TK_LIBRARY'] = "C:\\Users\\c804324\\AppData\\Local\\Programs\\Python
 ## Soluciona error: ImporError: cannot import name '_methods'
 additional_mods = ['numpy.core._methods', 'numpy.lib.format']
 
-setup(name = "take_a_video" ,
+setup(name = "people_counter_cam" ,
       version = "0.1" ,
       description = "Prueba de ejecutable windows..." ,
       options = {'build_exe': {'includes': additional_mods}},
-      executables = [Executable("take_a_video.py")])
+      executables = [Executable("people_counter_cam.py")])

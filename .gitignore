@@ -104,6 +104,10 @@ venv.bak/
 .mypy_cache/
 
 # videos
-video_Teusaquillo_1.avi
+videos/video_Teusaquillo_1.avi
+videos/video_Teusaquillo_0.avi
 videos/
 build/
+take_a_video_app/
+EasyTrack/
+output/
